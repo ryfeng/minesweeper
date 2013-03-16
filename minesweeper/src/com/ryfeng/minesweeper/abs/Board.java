@@ -32,10 +32,6 @@ public class Board {
 		return height;
 	}
 	
-	private boolean verifyMove(int x, int y) {
-		return (x >= 0 && x < this.width && y >= 0 && y < this.height);
-	}
-	
 	/**
 	 * Unseeded generation
 	 */
@@ -46,8 +42,8 @@ public class Board {
 			int pos = gen.nextInt(width * height);
 			int x = (int) Math.floor(pos % height);
 			int y = (int) Math.floor(pos / height);
-			
 			if (board[x+1][y+1] != -1) {
+				minesLeft--;
 				board[x+1][y+1] = -1;
 				// Increment the neighbors
 				if (board[x][y] != -1) {
@@ -74,7 +70,6 @@ public class Board {
 				if (board[x+2][y+2] != -1) {
 					board[x+2][y+2]++;
 				}
-				minesLeft++;
 			}
 		}
 	}
@@ -94,7 +89,7 @@ public class Board {
 	}
 	
 	public int move(int x, int y) {
-		return board[x][y];
+		return board[x+1][y+1];
 	}
 
 }

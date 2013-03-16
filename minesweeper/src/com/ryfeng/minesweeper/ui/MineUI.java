@@ -5,16 +5,22 @@ import javax.swing.JFrame;
 import com.ryfeng.minesweeper.abs.Board;
 
 public class MineUI {
-
-	private JFrame frame;
 	
 	public MineUI() {
-		frame = new JFrame();
-		MinePanel panel = new MinePanel(new Board(9, 9, 10));
-		frame.setContentPane(panel);
+		JFrame frame = new JFrame("Minesweeper!");
 		
+		Board board = new Board(9, 9, 10);
+		board.generateBoard();
+		MinePanel panel = new MinePanel(board);
+		frame.setContentPane(panel);
+
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setTitle("Minesweeper!");
+		frame.pack();
+		frame.setVisible(true);
+	}
+	
+	public static void main(String[] args) {
+		new MineUI();
 	}
 	
 }

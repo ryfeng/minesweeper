@@ -6,10 +6,13 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import com.ryfeng.minesweeper.abs.Board;
 
 public class MinePanel extends JPanel {
+	
+	private JButton[][] buttons;
 	
 	private class MineListener implements ActionListener {
 		private final Board board;
@@ -22,10 +25,39 @@ public class MinePanel extends JPanel {
 		}
 		
 		public void actionPerformed(ActionEvent e) {
-			int result = board.move(x, y);
-			
 			JButton button = (JButton) e.getSource();
+			reveal(button);
+		}
+		
+		public void reveal(JButton button) {
+			int result = board.move(x, y);
 			button.setText(String.valueOf(result));
+			if (result == 0) {
+				if (x != 0) {
+					if (y != 0) {
+						clickIfUnrevealed(buttons[x-1][y-1]);
+					}
+					clickIfUnrevealed(buttons[x-1][y]);
+					if (y < board.getHeight() - 1) {
+						clickIfUnrevealed(buttons[x-1][y+1]);
+					}
+				}
+				if (y != 0) {
+					clickIfUnrevealed(buttons[x][y-1]);
+				}
+				if (y < board.getHeight() - 1) {
+					clickIfUnrevealed(buttons[x][y+1]);
+				}
+				if (x < board.getWidth() - 1) {
+					if (y != 0) {
+						clickIfUnrevealed(buttons[x+1][y-1]);
+					}
+					clickIfUnrevealed(buttons[x+1][y]);
+					if (y < board.getHeight() - 1) {
+						clickIfUnrevealed(buttons[x+1][y+1]);
+					}
+				}
+			}
 		}
 	}
 	
@@ -36,12 +68,21 @@ public class MinePanel extends JPanel {
 		int height = board.getHeight();
 		this.setLayout(new GridLayout(width, height));
 		
+		buttons = new JButton[width][height];
+		
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				JButton button = new JButton("");
+				JButton button = new JButton("   ");
 				this.add(button);
+				buttons[i][j] = button;
 				button.addActionListener(new MineListener(board, i, j));
 			}
+		}
+	}
+	
+	private void clickIfUnrevealed(final JButton button) {
+		if (button.getText() == "   ") {
+			((MineListener) button.getActionListeners()[0]).reveal(button);
 		}
 	}
 	
