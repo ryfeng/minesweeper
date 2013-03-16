@@ -2,30 +2,34 @@ package com.ryfeng.minesweeper.abs;
 
 import java.util.Random;
 
-import com.ryfeng.minesweeper.exceptions.InvalidBoardException;
-import com.ryfeng.minesweeper.exceptions.InvalidMoveException;
-
 /**
- * Abstract data respresentation for board
+ * Abstract data representation for board
  * 
  * @author Royce Feng
  *
  */
 public class Board {
-	
-	private int width, height;
+
+	private final int width, height;
 	private int[][] board;
 	private int mines;
 	private Random gen;
 	
-	public Board(int width, int height, int mines) throws InvalidBoardException {
-		if (mines > width*height) {
-			throw new InvalidBoardException("Too many mines!");
-		}
+	public Board(int width, int height, int mines) {
 		// One extra column/row for edges (no mines placed on these)
 		board = new int[width+2][height+2];
+		this.width = width;
+		this.height = height;
 		this.mines = mines;
 		gen = new Random();
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
 	}
 	
 	private boolean verifyMove(int x, int y) {
@@ -85,18 +89,11 @@ public class Board {
 		
 	}
 	
-	public void firstMove(int x, int y) throws InvalidMoveException {
-		if (verifyMove(x,y)) {
-			throw new InvalidMoveException(x,y);
-		}
+	public void firstMove(int x, int y) {
 		
 	}
 	
-	public int move(int x, int y) throws InvalidMoveException {
-		if (verifyMove(x,y)) {
-			throw new InvalidMoveException(x,y);
-		}
-		
+	public int move(int x, int y) {
 		return board[x][y];
 	}
 
